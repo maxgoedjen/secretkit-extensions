@@ -21,7 +21,7 @@ let package = Package(
             targets: ["SmartCardSecretKitExtensions"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/maxgoedjen/secretive", branch: "layout"),
+        .package(url: "https://github.com/maxgoedjen/secretive", branch: "main"),
     ],
     targets: [
         .target(
