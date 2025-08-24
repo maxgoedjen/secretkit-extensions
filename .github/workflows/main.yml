@@ -1,0 +1,14 @@
+name: Build
+
+on: [push, pull_request]
+jobs:
+  test:
+#     runs-on: macOS-latest
+    runs-on: macos-15
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v5
+    - name: Set Environment
+      run: sudo xcrun xcode-select -s /Applications/Xcode_26.0.app
+    - name: Build
+      run: swift build --build-system swiftbuild
