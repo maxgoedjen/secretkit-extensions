@@ -14,10 +14,6 @@ SecretKit Extensions is designed to be easily auditable by people who are consid
 
 All contributors must abide by the [Code of Conduct](CODE_OF_CONDUCT.md)
 
-## Localization
-
-If you'd like to contribute a translation, please see [Localizing](LOCALIZING.md) to get started.
-
 ## Secretive and SecretKit Extensions is Opinionated
 
 I'm releasing Secretive as open source so that other people can use it and audit it, feeling comfortable in knowing that the source is available so they can see what it's doing. I have a pretty strong idea of what I'd like this project to look like, and I may respectfully decline contributions that don't line up with that vision. If you'd like to propose a change before implementing, please feel free to [Open an Issue with the proposed tag](https://github.com/maxgoedjen/secretive/issues/new?labels=proposed).
