@@ -1,0 +1,15 @@
+{
+  "originHash" : "ebee2912718c28fa0d538d94dc1b984a90a9c4ae77461dd0d41af5fc93ad7b96",
+  "pins" : [
+    {
+      "identity" : "secretive",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/maxgoedjen/secretive",
+      "state" : {
+        "branch" : "layout",
+        "revision" : "9dbaea699b2b99c2d808424d33bfdfa4c35b7a39"
+      }
+    }
+  ],
+  "version" : 3
+}
