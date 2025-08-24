@@ -1,27 +1,31 @@
 import Foundation
 import SecretKit
 
-public protocol StoreEncrypable: SecretStore {
+public protocol EncryptingSecretStore: SecretStore {
 
     /// Encrypts a payload with a specified key.
     /// - Parameters:
     ///   - data: The payload to encrypt.
     ///   - secret: The secret to encrypt with.
     /// - Returns: The encrypted data.
-    func encrypt(data: Data, with secret: SecretType, for provenance: SigningRequestProvenance) async throws -> Data
+    func encrypt(data: Data, with secret: SecretType) async throws -> Data
 
     /// Decrypts a payload with a specified key.
     /// - Parameters:
     ///   - data: The payload to decrypt.
     ///   - secret: The secret to decrypt with.
     /// - Returns: The decrypted data.
-    func decrypt(data: Data, with secret: SecretType, for provenance: SigningRequestProvenance) async throws -> Data
+    func decrypt(data: Data, with secret: SecretType) async throws -> Data
 
 }
 
-extension StoreEncrypable {
+extension EncryptingSecretStore {
 
-    public func encrypt(data: Data, with secret: SecretType, for provenance: SigningRequestProvenance) throws -> Data {
+    public func encrypt(data: Data, with secret: SecretType) async throws -> Data {
+        try await _encrypt(data: data, with: secret)
+    }
+
+    package func _encrypt(data: Data, with secret: SecretType) async throws -> Data {
         let attributes = KeychainDictionary([
             kSecAttrKeyType: secret.algorithm.secAttrKeyType,
             kSecAttrKeySizeInBits: secret.keySize,

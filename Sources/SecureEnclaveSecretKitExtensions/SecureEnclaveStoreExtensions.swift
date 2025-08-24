@@ -4,13 +4,14 @@ import SecretKitExtensions
 import SecureEnclaveSecretKit
 import LocalAuthentication
 
-extension SecureEnclave.Store: StoreVerifiable {}
-extension SecureEnclave.Store: StoreEncrypable {
+extension SecureEnclave.Store: VerifyingSecretStore {}
 
-    public func decrypt(data: Data, with secret: SecretType, for provenance: SigningRequestProvenance) async throws -> Data {
+extension SecureEnclave.Store: EncryptingSecretStore {
+
+    public func decrypt(data: Data, with secret: SecretType) async throws -> Data {
         let context = LAContext()
         context.localizedCancelTitle = String(localized: .authContextRequestDenyButton)
-        context.localizedReason = String(localized: .authContextRequestSignatureDescription(appName: provenance.origin.displayName, secretName: secret.name))
+        context.localizedReason = String(localized: .authContextRequestDecryptDescription(secretName: secret.name))
         let attributes = KeychainDictionary([
             kSecClass: kSecClassKey,
             kSecAttrKeyClass: kSecAttrKeyClassPrivate,
@@ -31,10 +32,10 @@ extension SecureEnclave.Store: StoreEncrypable {
         }
         let key = untypedSafe as! SecKey
         var encryptError: SecurityError?
-        guard let signature = SecKeyCreateDecryptedData(key, try encryptionAlgorithm(for: secret), data as CFData, &encryptError) else {
+        guard let decrypted = SecKeyCreateDecryptedData(key, try encryptionAlgorithm(for: secret), data as CFData, &encryptError) else {
             throw SigningError(error: encryptError)
         }
-        return signature as Data
+        return decrypted as Data
     }
 
 }

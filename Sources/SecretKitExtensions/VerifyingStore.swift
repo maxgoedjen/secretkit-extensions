@@ -1,7 +1,7 @@
 import Foundation
 import SecretKit
 
-public protocol StoreVerifiable: SecretStore {
+public protocol VerifyingSecretStore: SecretStore {
 
     /// Verifies that a signature is valid over a specified payload.
     /// - Parameters:
@@ -9,13 +9,13 @@ public protocol StoreVerifiable: SecretStore {
     ///   - data: The data to verify the signature of.
     ///   - secret: The secret whose signature to verify.
     /// - Returns: Whether the signature was verified.
-    func verify(signature: Data, for data: Data, with secret: SecretType, for provenance: SigningRequestProvenance) async throws -> Bool
+    func verify(signature: Data, for data: Data, with secret: SecretType) async throws -> Bool
 
 }
 
-extension StoreVerifiable {
+extension VerifyingSecretStore {
 
-    public func verify(signature: Data, for data: Data, with secret: SecretType, for provenance: SigningRequestProvenance) throws -> Bool {
+    public func verify(signature: Data, for data: Data, with secret: SecretType) async throws -> Bool {
         let attributes = KeychainDictionary([
             kSecAttrKeyType: secret.algorithm.secAttrKeyType,
             kSecAttrKeySizeInBits: secret.keySize,
@@ -27,7 +27,7 @@ extension StoreVerifiable {
             throw KeychainError(statusCode: errSecSuccess)
         }
         let key = untypedSafe as! SecKey
-        let verified = SecKeyVerifySignature(key, .ecdsaSignatureMessageX962SHA256, data as CFData, signature as CFData, &verifyError)
+        let verified = SecKeyVerifySignature(key, try signatureAlgorithm(for: secret, allowRSA: true), data as CFData, signature as CFData, &verifyError)
         if !verified, let verifyError {
             if verifyError.takeUnretainedValue() ~= .verifyError {
                 return false

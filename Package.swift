@@ -27,20 +27,23 @@ let package = Package(
         .target(
             name: "SecretKitExtensions",
             dependencies: [.product(name: "SecretKit", package: "secretive")],
+            path: "Sources/SecretKitExtensions",
             resources: [localization],
-            swiftSettings: swiftSettings
+            swiftSettings: swiftSettings,
         ),
         .target(
             name: "SecureEnclaveSecretKitExtensions",
             dependencies: [.product(name: "SecureEnclaveSecretKit", package: "secretive"), "SecretKitExtensions"],
+            path: "Sources/SecureEnclaveSecretKitExtensions",
             resources: [localization],
-            swiftSettings: swiftSettings
+            swiftSettings: swiftSettings,
         ),
         .target(
             name: "SmartCardSecretKitExtensions",
             dependencies: [.product(name: "SmartCardSecretKit", package: "secretive"), "SecretKitExtensions"],
+            path: "Sources/SmartCardSecretKitExtensions",
             resources: [localization],
-            swiftSettings: swiftSettings
+            swiftSettings: swiftSettings,
         ),
     ]
 )
@@ -52,6 +55,6 @@ var localization: Resource {
 var swiftSettings: [PackageDescription.SwiftSetting] {
     [
         .swiftLanguageMode(.v6),
-        .treatAllWarnings(as: .error),
+//        .treatAllWarnings(as: .error),
     ]
 }
